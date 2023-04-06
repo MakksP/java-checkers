@@ -11,6 +11,9 @@ public class ButtonsArea extends JPanel {
         this.height = height;
         this.play = new PlayButton();
         this.quit = new QuitButton();
+        this.setLayout(null);
+
+
     }
 
     public int getWidth(){

@@ -42,13 +42,6 @@ public class StartFrame extends JFrame {
         this.buttonsArea.setBounds(500, 300, this.buttonsArea.getWidth(), this.buttonsArea.getHeight());
         this.buttonsArea.setOpaque(false);
         this.backgroundPanel.add(buttonsArea);
-        this.buttonsArea.setLayout(null);
-        this.buttonsArea.getPlay().setText("Graj");
-        this.buttonsArea.getPlay().setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
-        this.buttonsArea.getQuit().setText("Wyjdź z gry");
-        this.buttonsArea.getQuit().setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
-        this.buttonsArea.getPlay().setBounds(75, 50, 150, 50);
-        this.buttonsArea.getQuit().setBounds(75, 200, 150, 50);
         this.buttonsArea.add(this.buttonsArea.getPlay());
         this.buttonsArea.add(this.buttonsArea.getQuit());
     }
