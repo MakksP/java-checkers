@@ -4,7 +4,7 @@ import java.util.HashMap;
 public class PlayBoard {
     private final int width = 8;
     private final int height = 8;
-    private ArrayList<ArrayList<String>> board;
+    private ArrayList<ArrayList<Field>> board;
 
     public boolean isBlackPlayerArea(int i){
         return i < 3;
@@ -22,6 +22,14 @@ public class PlayBoard {
         }
     }
 
+    public int getWidth(){
+        return width;
+    }
+
+    public int getHeight(){
+        return height;
+    }
+
     private static void namesOfFieldsInitializer(HashMap <String, String> toInitialize){
         toInitialize.put("whiteFieldNoPlayer", "w");
         toInitialize.put("blackFieldNoPlayer", "b");
@@ -30,19 +38,19 @@ public class PlayBoard {
     }
 
     public void boardInitializer(HashMap <String, String> namesOfFields){
-        for (int i = 0; i < width; i++){
-            for (int j = 0; j < height; j++) {
+        for (int i = 0; i < height; i++){
+            for (int j = 0; j < width; j++) {
                 if (isBlackColorOnBoard(i, j)){
                     if (isBlackPlayerArea(i)){
-                        this.board.get(i).add(namesOfFields.get("blackFieldPlayerBlack"));
+                        this.board.get(i).add(new Field(namesOfFields.get("blackFieldPlayerBlack"), j, i, "bb.png"));
                         continue;
                     } else if (isWhitePlayerArea(i)){
-                        this.board.get(i).add(namesOfFields.get("blackFieldPlayerWhite"));
+                        this.board.get(i).add(new Field(namesOfFields.get("blackFieldPlayerWhite"), j, i, "bw.png"));
                         continue;
                     }
-                    this.board.get(i).add(namesOfFields.get("blackFieldNoPlayer"));
+                    this.board.get(i).add(new Field(namesOfFields.get("blackFieldNoPlayer"), j, i, "b.png"));
                 } else {
-                    this.board.get(i).add(namesOfFields.get("whiteFieldNoPlayer"));
+                    this.board.get(i).add(new Field(namesOfFields.get("whiteFieldNoPlayer"), j, i, "w.png"));
                 }
             }
         }
