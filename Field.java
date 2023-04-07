@@ -19,4 +19,12 @@ public class Field extends JButton {
     public void setName(String name){
         this.name = name;
     }
+
+    public int getYIndex() {
+        return yIndex;
+    }
+
+    public int getXIndex() {
+        return xIndex;
+    }
 }

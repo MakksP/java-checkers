@@ -13,12 +13,21 @@ public class QuitButton extends JButton implements ActionListener, MouseListener
         this.setBounds(70, 195, 160, 60);
     }
 
+    public void setDefaultFont(){
+        this.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
+    }
+
+    public void setPointerFont(){
+        this.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 23));
+    }
+
     public QuitButton(){
         this.setFocusable(false);
         this.addActionListener(this);
 
         this.setText("Wyjdź z gry");
-        this.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
+        this.setDefaultFont();
+        this.setForeground(Color.BLACK);
         this.setDefaultBounds();
 
         this.setIcon(new ImageIcon("przycisk.png"));
@@ -56,6 +65,7 @@ public class QuitButton extends JButton implements ActionListener, MouseListener
         this.setCursor(new Cursor(Cursor.HAND_CURSOR));
         this.setPointerBounds();
         this.setIcon(new ImageIcon("przycisk2.png"));
+        this.setPointerFont();
     }
 
     @Override
@@ -63,5 +73,6 @@ public class QuitButton extends JButton implements ActionListener, MouseListener
         this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         this.setDefaultBounds();
         this.setIcon(new ImageIcon("przycisk.png"));
+        this.setDefaultFont();
     }
 }

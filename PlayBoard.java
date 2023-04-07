@@ -22,6 +22,10 @@ public class PlayBoard {
         }
     }
 
+    public ArrayList<ArrayList<Field>> getBoard(){
+        return this.board;
+    }
+
     public int getWidth(){
         return width;
     }

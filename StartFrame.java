@@ -38,11 +38,11 @@ public class StartFrame extends JFrame {
 
     public void setMenuPanel(){
         //stworzenie pola dla przycisków i umieszczenie ich w nim
-        this.buttonsArea = new ButtonsArea(300, 300);
+        this.buttonsArea = new ButtonsArea(300, 300, backgroundPanel);
         this.buttonsArea.setBounds(500, 300, this.buttonsArea.getWidth(), this.buttonsArea.getHeight());
         this.buttonsArea.setOpaque(false);
         this.backgroundPanel.add(buttonsArea);
-        this.buttonsArea.add(this.buttonsArea.getPlay());
+        this.buttonsArea.add(this.buttonsArea.getPlay(), backgroundPanel);
         this.buttonsArea.add(this.buttonsArea.getQuit());
     }
 

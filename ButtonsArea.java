@@ -6,15 +6,14 @@ public class ButtonsArea extends JPanel {
     private final PlayButton play;
     private final QuitButton quit;
 
-    public ButtonsArea(int width, int height){
+
+    public ButtonsArea(int width, int height, BackgroundPanel backgroundPanel){
         this.width = width;
         this.height = height;
-        this.play = new PlayButton();
+        this.play = new PlayButton(backgroundPanel);
         this.quit = new QuitButton();
         this.play.setQuitHandle(this.quit);
         this.setLayout(null);
-
-
     }
 
     public int getWidth(){
