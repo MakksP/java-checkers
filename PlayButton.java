@@ -10,6 +10,9 @@ public class PlayButton extends JButton implements ActionListener, MouseListener
     private JButton quitHandle;
     private PlayBoard board;
     private final BackgroundPanel backgroundPanelHandle;
+    private BoardArea boardArea;
+    private final int boardWidth = 600;
+    private final int boardHeight = 600;
 
     public void setDefaultBounds(){
         this.setBounds(75, 50, 150, 50);
@@ -53,18 +56,18 @@ public class PlayButton extends JButton implements ActionListener, MouseListener
         this.quitHandle = quitHandle;
     }
 
-    private static void drawNewGameBoard(PlayBoard board){
+    private void drawNewGameBoard(){
         //todo w zaleznosci od pol w boardzie rysowac takie kwadraty gry
-        final int width = board.getWidth();
-        final int height = board.getHeight();
+        final int width = this.board.getWidth();
+        final int height = this.board.getHeight();
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                if (board.getBoard().get(i).get(j).getName().equals("b")){
-                    //todo dokonczyc setbound
-
-                }
+                this.board.getBoard().get(i).get(j).setBounds((this.board.getBoard().get(i).get(j).getXIndex() * 75),
+                        (this.board.getBoard().get(i).get(j).getYIndex() * 75), 75, 75);
+                this.boardArea.add(this.board.getBoard().get(i).get(j));
             }
         }
+        this.boardArea.repaint();
     }
 
     @Override
@@ -72,7 +75,8 @@ public class PlayButton extends JButton implements ActionListener, MouseListener
         this.setVisible(false);
         this.quitHandle.setVisible(false);
         this.board = new PlayBoard();
-        drawNewGameBoard(this.board);
+        this.boardArea = new BoardArea(boardWidth, boardHeight, backgroundPanelHandle);
+        this.drawNewGameBoard();
     }
 
     @Override
