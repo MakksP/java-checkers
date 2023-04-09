@@ -73,8 +73,9 @@ public class PlayBoard {
         }
     }
 
-    public static void checkFieldAndSetBorderToValidToMove(Field field){
+    public static void checkFieldAndSetBorderToValidToMove(Field field, int buttonXIndex, int buttonYIndex){
         if (field.getName().equals("b")){
+            field.getSelectedFlag().setSelectedFlag(true, buttonXIndex, buttonYIndex);
             field.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
         }
     }
@@ -84,11 +85,22 @@ public class PlayBoard {
             if (buttonYIndex - 1 >= 0){
                 if (buttonXIndex - 1 >= 0){
                     Field tmpField = board.get(buttonYIndex - 1).get(buttonXIndex - 1);
-                    checkFieldAndSetBorderToValidToMove(tmpField);
+                    checkFieldAndSetBorderToValidToMove(tmpField, buttonXIndex, buttonYIndex);
                 }
                 if (buttonXIndex + 1 < width){
                     Field tmpField = board.get(buttonYIndex - 1).get(buttonXIndex + 1);
-                    checkFieldAndSetBorderToValidToMove(tmpField);
+                    checkFieldAndSetBorderToValidToMove(tmpField, buttonXIndex, buttonYIndex);
+                }
+            }
+        } else if (playerTurn == 2){
+            if (buttonYIndex + 1 < height){
+                if (buttonXIndex - 1 >= 0){
+                    Field tmpField = board.get(buttonYIndex + 1).get(buttonXIndex - 1);
+                    checkFieldAndSetBorderToValidToMove(tmpField, buttonXIndex, buttonYIndex);
+                }
+                if (buttonXIndex + 1 < width){
+                    Field tmpField = board.get(buttonYIndex + 1).get(buttonXIndex + 1);
+                    checkFieldAndSetBorderToValidToMove(tmpField, buttonXIndex, buttonYIndex);
                 }
             }
         }
@@ -114,5 +126,19 @@ public class PlayBoard {
 
     public void setPlayerTurn(byte playerTurn) {
         this.playerTurn = playerTurn;
+    }
+
+    public static void changeIconsOfTwoFields(Field firstField, Field secondField){
+        firstField.setIcon(new ImageIcon(firstField.getName() + ".png"));
+        secondField.setIcon(new ImageIcon(secondField.getName() + ".png"));
+    }
+
+    public void swapFields(int indexXSelectingButton, int indexYSelectingButton, int xIndex, int yIndex) {
+        String tmpName = board.get(indexYSelectingButton).get(indexXSelectingButton).getName();
+        board.get(indexYSelectingButton).get(indexXSelectingButton).setName(board.get(yIndex).get(xIndex).getName());
+        board.get(yIndex).get(xIndex).setName(tmpName);
+        changeIconsOfTwoFields(board.get(indexYSelectingButton).get(indexXSelectingButton), board.get(yIndex).get(xIndex));
+        board.get(indexYSelectingButton).get(indexXSelectingButton).repaint();
+        board.get(yIndex).get(xIndex).repaint();
     }
 }

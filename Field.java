@@ -7,6 +7,7 @@ public class Field extends JButton implements ActionListener {
     private String name;
     private final int xIndex;
     private final int yIndex;
+    private SelectedFlag selectedFlag;
     private final PlayBoard playBoardHandle;
 
     public Field(String name, int xIndex, int yIndex, String icon, PlayBoard playBoardHandle){
@@ -15,6 +16,7 @@ public class Field extends JButton implements ActionListener {
         this.yIndex = yIndex;
         this.setIcon(new ImageIcon(icon));
         this.playBoardHandle = playBoardHandle;
+        this.selectedFlag = new SelectedFlag();
         this.addActionListener(this);
     }
 
@@ -48,9 +50,26 @@ public class Field extends JButton implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         this.playBoardHandle.clearAllSelections();
-        if (this.selectedCorrectPlayer()){
+        if (this.selectedFlag.getLogicSelectedValue()){
+            this.playBoardHandle.swapFields(this.selectedFlag.getIndexXSelectingButton(),
+                    this.selectedFlag.getIndexYSelectingButton(), this.xIndex, this.yIndex);
+            this.selectedFlag.setSelectedFlag(false, 0, 0);
+            if (this.playBoardHandle.getPlayerTurn() == 1){
+                this.playBoardHandle.setPlayerTurn((byte) 2);
+            } else {
+                this.playBoardHandle.setPlayerTurn((byte) 1);
+            }
+        }else if (this.selectedCorrectPlayer()){
             this.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
             this.playBoardHandle.selectStandardMoveFields(xIndex, yIndex);
+
         }
+
     }
+
+    public SelectedFlag getSelectedFlag() {
+        return selectedFlag;
+    }
+
+
 }
