@@ -1,3 +1,5 @@
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -5,6 +7,8 @@ public class PlayBoard {
     private final int width = 8;
     private final int height = 8;
     private ArrayList<ArrayList<Field>> board;
+    //1 means white player 2 means black player
+    private byte playerTurn;
 
     public boolean isBlackPlayerArea(int i){
         return i < 3;
@@ -46,15 +50,45 @@ public class PlayBoard {
             for (int j = 0; j < width; j++) {
                 if (isBlackColorOnBoard(i, j)){
                     if (isBlackPlayerArea(i)){
-                        this.board.get(i).add(new Field(namesOfFields.get("blackFieldPlayerBlack"), j, i, "bb.png"));
+                        this.board.get(i).add(new Field(namesOfFields.get("blackFieldPlayerBlack"), j, i, "bb.png", this));
                         continue;
                     } else if (isWhitePlayerArea(i)){
-                        this.board.get(i).add(new Field(namesOfFields.get("blackFieldPlayerWhite"), j, i, "bw.png"));
+                        this.board.get(i).add(new Field(namesOfFields.get("blackFieldPlayerWhite"), j, i, "bw.png", this));
                         continue;
                     }
-                    this.board.get(i).add(new Field(namesOfFields.get("blackFieldNoPlayer"), j, i, "b.png"));
+                    this.board.get(i).add(new Field(namesOfFields.get("blackFieldNoPlayer"), j, i, "b.png", this));
                 } else {
-                    this.board.get(i).add(new Field(namesOfFields.get("whiteFieldNoPlayer"), j, i, "w.png"));
+                    this.board.get(i).add(new Field(namesOfFields.get("whiteFieldNoPlayer"), j, i, "w.png", this));
+                }
+            }
+        }
+    }
+
+
+    public void clearAllSelections(){
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                this.board.get(i).get(j).setDefaultBorder();
+            }
+        }
+    }
+
+    public static void checkFieldAndSetBorderToValidToMove(Field field){
+        if (field.getName().equals("b")){
+            field.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+        }
+    }
+
+    public void selectStandardMoveFields(int buttonXIndex, int buttonYIndex){
+        if (playerTurn == 1){
+            if (buttonYIndex - 1 >= 0){
+                if (buttonXIndex - 1 >= 0){
+                    Field tmpField = board.get(buttonYIndex - 1).get(buttonXIndex - 1);
+                    checkFieldAndSetBorderToValidToMove(tmpField);
+                }
+                if (buttonXIndex + 1 < width){
+                    Field tmpField = board.get(buttonYIndex - 1).get(buttonXIndex + 1);
+                    checkFieldAndSetBorderToValidToMove(tmpField);
                 }
             }
         }
@@ -70,8 +104,15 @@ public class PlayBoard {
         for (int i = 0; i < height; i++){
             board.add(new ArrayList<>());
         }
-
+        this.playerTurn = 1;
         boardInitializer(namesOfFields);
+    }
 
+    public byte getPlayerTurn() {
+        return playerTurn;
+    }
+
+    public void setPlayerTurn(byte playerTurn) {
+        this.playerTurn = playerTurn;
     }
 }

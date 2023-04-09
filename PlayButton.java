@@ -57,7 +57,6 @@ public class PlayButton extends JButton implements ActionListener, MouseListener
     }
 
     private void drawNewGameBoard(){
-        //todo w zaleznosci od pol w boardzie rysowac takie kwadraty gry
         final int width = this.board.getWidth();
         final int height = this.board.getHeight();
         for (int i = 0; i < height; i++) {
