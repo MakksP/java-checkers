@@ -60,6 +60,7 @@ public class Field extends JButton implements ActionListener {
                 this.playBoardHandle.setPlayerTurn((byte) 1);
             }
         }else if (this.selectedCorrectPlayer()){
+            this.playBoardHandle.clearAllSelections();
             this.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
             this.playBoardHandle.selectStandardMoveFields(xIndex, yIndex);
 

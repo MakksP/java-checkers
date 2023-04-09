@@ -73,6 +73,14 @@ public class PlayBoard {
         }
     }
 
+    public void clearAllFlags(){
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                this.board.get(i).get(j).getSelectedFlag().setSelectedFlag(false, 0, 0);
+            }
+        }
+    }
+
     public static void checkFieldAndSetBorderToValidToMove(Field field, int buttonXIndex, int buttonYIndex){
         if (field.getName().equals("b")){
             field.getSelectedFlag().setSelectedFlag(true, buttonXIndex, buttonYIndex);
@@ -131,6 +139,8 @@ public class PlayBoard {
     public static void changeIconsOfTwoFields(Field firstField, Field secondField){
         firstField.setIcon(new ImageIcon(firstField.getName() + ".png"));
         secondField.setIcon(new ImageIcon(secondField.getName() + ".png"));
+        firstField.repaint();
+        secondField.repaint();
     }
 
     public void swapFields(int indexXSelectingButton, int indexYSelectingButton, int xIndex, int yIndex) {
@@ -138,7 +148,5 @@ public class PlayBoard {
         board.get(indexYSelectingButton).get(indexXSelectingButton).setName(board.get(yIndex).get(xIndex).getName());
         board.get(yIndex).get(xIndex).setName(tmpName);
         changeIconsOfTwoFields(board.get(indexYSelectingButton).get(indexXSelectingButton), board.get(yIndex).get(xIndex));
-        board.get(indexYSelectingButton).get(indexXSelectingButton).repaint();
-        board.get(yIndex).get(xIndex).repaint();
     }
 }
