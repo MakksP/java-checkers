@@ -46,8 +46,4 @@ public class StartFrame extends JFrame {
         this.buttonsArea.add(this.buttonsArea.getQuit());
     }
 
-    public void showMenu(){
-        //setMenuPanel(this);
-    }
-
 }

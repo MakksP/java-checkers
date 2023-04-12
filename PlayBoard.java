@@ -7,6 +7,7 @@ public class PlayBoard {
     private final int width = 8;
     private final int height = 8;
     private ArrayList<ArrayList<Field>> board;
+    private final BackgroundPanel backgroundPanelHandle;
     //1 means white player 2 means black player
     private byte playerTurn;
 
@@ -50,15 +51,15 @@ public class PlayBoard {
             for (int j = 0; j < width; j++) {
                 if (isBlackColorOnBoard(i, j)){
                     if (isBlackPlayerArea(i)){
-                        this.board.get(i).add(new Field(namesOfFields.get("blackFieldPlayerBlack"), j, i, "bb.png", this));
+                        this.board.get(i).add(new Field(namesOfFields.get("blackFieldPlayerBlack"), j, i, "bb.png", this, backgroundPanelHandle));
                         continue;
                     } else if (isWhitePlayerArea(i)){
-                        this.board.get(i).add(new Field(namesOfFields.get("blackFieldPlayerWhite"), j, i, "bw.png", this));
+                        this.board.get(i).add(new Field(namesOfFields.get("blackFieldPlayerWhite"), j, i, "bw.png", this, backgroundPanelHandle));
                         continue;
                     }
-                    this.board.get(i).add(new Field(namesOfFields.get("blackFieldNoPlayer"), j, i, "b.png", this));
+                    this.board.get(i).add(new Field(namesOfFields.get("blackFieldNoPlayer"), j, i, "b.png", this, backgroundPanelHandle));
                 } else {
-                    this.board.get(i).add(new Field(namesOfFields.get("whiteFieldNoPlayer"), j, i, "w.png", this));
+                    this.board.get(i).add(new Field(namesOfFields.get("whiteFieldNoPlayer"), j, i, "w.png", this, backgroundPanelHandle));
                 }
             }
         }
@@ -114,7 +115,7 @@ public class PlayBoard {
         }
     }
 
-    public PlayBoard(){
+    public PlayBoard(BackgroundPanel backgroundPanelHandle){
         // w -> white field without player, b -> black field without player
         // bw -> black field with white player, bb -> black field with black player
         HashMap <String, String> namesOfFields = new HashMap<>();
@@ -125,6 +126,7 @@ public class PlayBoard {
             board.add(new ArrayList<>());
         }
         this.playerTurn = 1;
+        this.backgroundPanelHandle = backgroundPanelHandle;
         boardInitializer(namesOfFields);
     }
 

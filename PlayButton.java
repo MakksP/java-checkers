@@ -73,8 +73,9 @@ public class PlayButton extends JButton implements ActionListener, MouseListener
     public void actionPerformed(ActionEvent e) {
         this.setVisible(false);
         this.quitHandle.setVisible(false);
-        this.board = new PlayBoard();
+        this.board = new PlayBoard(backgroundPanelHandle);
         this.boardArea = new BoardArea(boardWidth, boardHeight, backgroundPanelHandle);
+        this.backgroundPanelHandle.playerTurnInitializer();
         this.drawNewGameBoard();
     }
 
