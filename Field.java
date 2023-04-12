@@ -266,18 +266,35 @@ public class Field extends JButton implements ActionListener {
         return false;
     }
 
+    public boolean checkContinuingAttack(int x, int y){
+
+            if(checkTopLeftAttack(x, y)){
+                return true;
+            }
+            if(checkTopRightAttack(x, y)){
+                return true;
+            }
+            if(checkBottomLeftAttack(x, y)){
+                return true;
+            }
+            if(checkBottomRightAttack(x, y)){
+                return true;
+            }
+
+        return false;
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (attackLockWhite.getAttackLock() == 1 && this.playBoardHandle.getPlayerTurn() == 1){
             if (this.getXIndex() == attackLockWhite.getPlayerX() && this.getYIndex() == attackLockWhite.getPlayerY()){
                 this.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
             } else if (this.getXIndex() == attackLockWhite.getAttackedFieldX() && this.getYIndex() == attackLockWhite.getAttackedFieldY()){
-                //todo pole gdzie gracz sie teleportuje po biciu, obsluzyc co sie dzieje jak zbije
                 this.playBoardHandle.swapFields(this.getXIndex(), this.getYIndex(), attackLockWhite.getPlayerX(), attackLockWhite.getPlayerY());
                 attackLockWhite.setAttackLock(0);
                 this.playBoardHandle.deletePawn((this.getXIndex()+attackLockWhite.getPlayerX())/2, (this.getYIndex() +attackLockWhite.getPlayerY() )/2);
                 this.playBoardHandle.clearAllSelections();
-                if(this.checkPossibleAttacks());
+                if(this.checkContinuingAttack(this.getXIndex(), this.getYIndex()));
                 else {
                     this.changePlayerTurn();
                     this.checkPossibleAttacks();
@@ -291,12 +308,11 @@ public class Field extends JButton implements ActionListener {
             if (this.getXIndex() == attackLockBlack.getPlayerX() && this.getYIndex() == attackLockBlack.getPlayerY()){
                 this.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
             } else if (this.getXIndex() == attackLockBlack.getAttackedFieldX() && this.getYIndex() == attackLockBlack.getAttackedFieldY()){
-                //todo pole gdzie gracz sie teleportuje po biciu, obsluzyc co sie dzieje jak zbije
                 this.playBoardHandle.swapFields(this.getXIndex(), this.getYIndex(), attackLockBlack.getPlayerX(), attackLockBlack.getPlayerY());
                 attackLockBlack.setAttackLock(0);
                 this.playBoardHandle.deletePawn((this.getXIndex()+attackLockBlack.getPlayerX())/2, (this.getYIndex() +attackLockBlack.getPlayerY() )/2);
                 this.playBoardHandle.clearAllSelections();
-                if(this.checkPossibleAttacks());
+                if(this.checkContinuingAttack(this.getXIndex(), this.getYIndex()));
                 else {
                     this.changePlayerTurn();
                     this.checkPossibleAttacks();
