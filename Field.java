@@ -75,13 +75,19 @@ public class Field extends JButton implements ActionListener {
 
     //todo 1. sprawdzic ture 2. sprawdzac czy pole to gracz w zaleznosci od tury 3. sprawdzac przekatne
 
-    public static void attackFieldsInitializer(Field attackedField, Field currentField, int currentFieldX, int currentFieldY){
+    public void attackFieldsInitializer(Field attackedField, Field currentField, int currentFieldX, int currentFieldY){
 
         attackedField.setBorder(BorderFactory.createLineBorder(Color.red, 3));
         currentField.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 3));
-        attackLockWhite.setAttackLock(1);
-        attackLockWhite.setPlayerX(currentFieldX);
-        attackLockWhite.setPlayerY(currentFieldY);
+        if (this.playBoardHandle.getPlayerTurn() == 1){
+            attackLockWhite.setAttackLock(1);
+            attackLockWhite.setPlayerX(currentFieldX);
+            attackLockWhite.setPlayerY(currentFieldY);
+        } else if (this.playBoardHandle.getPlayerTurn() == 2){
+            attackLockBlack.setAttackLock(1);
+            attackLockBlack.setPlayerX(currentFieldX);
+            attackLockBlack.setPlayerY(currentFieldY);
+        }
         attackedField.repaint();
         currentField.repaint();
     }
@@ -127,14 +133,116 @@ public class Field extends JButton implements ActionListener {
     }
 
     public boolean checkTopRightAttack(int currentFieldX, int currentFieldY){
+        Field currentField = this.playBoardHandle.getBoard().get(currentFieldY).get(currentFieldX);
+        if (this.playBoardHandle.getPlayerTurn() == 1){ //biały
+            if (currentField.name.equals("bw")){
+                int XToCheck = currentField.getXIndex() + 1;
+                int YToCheck = currentField.getYIndex() - 1;
+                if (XToCheck + 1 < this.playBoardHandle.getWidth() && YToCheck > 0){
+                    if (this.playBoardHandle.getBoard().get(YToCheck).get(XToCheck).getName().equals("bb")){ //jesli w lewym gornym narozniku jest czarny przeciwnik
+                        Field attackedField = this.playBoardHandle.getBoard().get(YToCheck - 1).get(XToCheck + 1);
+                        if (attackedField.getName().equals("b")){
+                            attackFieldsInitializer(attackedField, currentField, currentFieldX, currentFieldY);
+                            attackLockWhite.setAttackedFieldX(XToCheck + 1);
+                            attackLockWhite.setAttackedFieldY(YToCheck - 1);
+                            return true;
+                        }
+                    }
+                }
+            }
+        } else if (this.playBoardHandle.getPlayerTurn() == 2){
+            if (currentField.name.equals("bb")){
+                int XToCheck = currentField.getXIndex() + 1;
+                int YToCheck = currentField.getYIndex() - 1;
+                if (XToCheck + 1 < this.playBoardHandle.getWidth() && YToCheck > 0){
+                    if (this.playBoardHandle.getBoard().get(YToCheck).get(XToCheck).getName().equals("bw")){ //jesli w lewym gornym narozniku jest biały przeciwnik
+                        Field attackedField = this.playBoardHandle.getBoard().get(YToCheck - 1).get(XToCheck + 1);
+                        if (attackedField.getName().equals("b")){
+                            attackFieldsInitializer(attackedField, currentField, currentFieldX, currentFieldY);
+                            attackLockBlack.setAttackedFieldX(XToCheck + 1);
+                            attackLockBlack.setAttackedFieldY(YToCheck - 1);
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
         return false;
     }
 
     public boolean checkBottomLeftAttack(int currentFieldX, int currentFieldY){
+        Field currentField = this.playBoardHandle.getBoard().get(currentFieldY).get(currentFieldX);
+        if (this.playBoardHandle.getPlayerTurn() == 1){ //biały
+            if (currentField.name.equals("bw")){
+                int XToCheck = currentField.getXIndex() - 1;
+                int YToCheck = currentField.getYIndex() + 1;
+                if (XToCheck > 0 && YToCheck + 1 < this.playBoardHandle.getHeight()){
+                    if (this.playBoardHandle.getBoard().get(YToCheck).get(XToCheck).getName().equals("bb")){ //jesli w lewym gornym narozniku jest czarny przeciwnik
+                        Field attackedField = this.playBoardHandle.getBoard().get(YToCheck + 1).get(XToCheck - 1);
+                        if (attackedField.getName().equals("b")){
+                            attackFieldsInitializer(attackedField, currentField, currentFieldX, currentFieldY);
+                            attackLockWhite.setAttackedFieldX(XToCheck - 1);
+                            attackLockWhite.setAttackedFieldY(YToCheck + 1);
+                            return true;
+                        }
+                    }
+                }
+            }
+        } else if (this.playBoardHandle.getPlayerTurn() == 2){
+            if (currentField.name.equals("bb")){
+                int XToCheck = currentField.getXIndex() - 1;
+                int YToCheck = currentField.getYIndex() + 1;
+                if (XToCheck > 0 && YToCheck < this.playBoardHandle.getHeight()){
+                    if (this.playBoardHandle.getBoard().get(YToCheck).get(XToCheck).getName().equals("bw")){ //jesli w lewym gornym narozniku jest biały przeciwnik
+                        Field attackedField = this.playBoardHandle.getBoard().get(YToCheck + 1).get(XToCheck - 1);
+                        if (attackedField.getName().equals("b")){
+                            attackFieldsInitializer(attackedField, currentField, currentFieldX, currentFieldY);
+                            attackLockBlack.setAttackedFieldX(XToCheck - 1);
+                            attackLockBlack.setAttackedFieldY(YToCheck + 1);
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
         return false;
     }
 
     public boolean checkBottomRightAttack(int currentFieldX, int currentFieldY){
+        Field currentField = this.playBoardHandle.getBoard().get(currentFieldY).get(currentFieldX);
+        if (this.playBoardHandle.getPlayerTurn() == 1){ //biały
+            if (currentField.name.equals("bw")){
+                int XToCheck = currentField.getXIndex() + 1;
+                int YToCheck = currentField.getYIndex() + 1;
+                if (XToCheck + 1 < this.playBoardHandle.getWidth() && YToCheck + 1 < this.playBoardHandle.getHeight()){
+                    if (this.playBoardHandle.getBoard().get(YToCheck).get(XToCheck).getName().equals("bb")){ //jesli w lewym gornym narozniku jest czarny przeciwnik
+                        Field attackedField = this.playBoardHandle.getBoard().get(YToCheck + 1).get(XToCheck + 1);
+                        if (attackedField.getName().equals("b")){
+                            attackFieldsInitializer(attackedField, currentField, currentFieldX, currentFieldY);
+                            attackLockWhite.setAttackedFieldX(XToCheck + 1);
+                            attackLockWhite.setAttackedFieldY(YToCheck + 1);
+                            return true;
+                        }
+                    }
+                }
+            }
+        } else if (this.playBoardHandle.getPlayerTurn() == 2){
+            if (currentField.name.equals("bb")){
+                int XToCheck = currentField.getXIndex() + 1;
+                int YToCheck = currentField.getYIndex() + 1;
+                if (XToCheck + 1 < this.playBoardHandle.getWidth() && YToCheck + 1 < this.playBoardHandle.getHeight()){
+                    if (this.playBoardHandle.getBoard().get(YToCheck).get(XToCheck).getName().equals("bw")){ //jesli w lewym gornym narozniku jest biały przeciwnik
+                        Field attackedField = this.playBoardHandle.getBoard().get(YToCheck + 1).get(XToCheck + 1);
+                        if (attackedField.getName().equals("b")){
+                            attackFieldsInitializer(attackedField, currentField, currentFieldX, currentFieldY);
+                            attackLockBlack.setAttackedFieldX(XToCheck + 1);
+                            attackLockBlack.setAttackedFieldY(YToCheck + 1);
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
         return false;
     }
 
@@ -172,9 +280,29 @@ public class Field extends JButton implements ActionListener {
                 if(this.checkPossibleAttacks());
                 else {
                     this.changePlayerTurn();
+                    this.checkPossibleAttacks();
                 }
             }else {
                 this.playBoardHandle.getBoard().get(attackLockWhite.getPlayerY()).get(attackLockWhite.getPlayerX()).
+                        setBorder(BorderFactory.createLineBorder(Color.yellow, 3)); //jeśli się kliknie gdzieś indziej to żeby zostało żółte zaznaczenie
+            }
+
+        }else if (attackLockBlack.getAttackLock() == 1 && this.playBoardHandle.getPlayerTurn() == 2){
+            if (this.getXIndex() == attackLockBlack.getPlayerX() && this.getYIndex() == attackLockBlack.getPlayerY()){
+                this.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
+            } else if (this.getXIndex() == attackLockBlack.getAttackedFieldX() && this.getYIndex() == attackLockBlack.getAttackedFieldY()){
+                //todo pole gdzie gracz sie teleportuje po biciu, obsluzyc co sie dzieje jak zbije
+                this.playBoardHandle.swapFields(this.getXIndex(), this.getYIndex(), attackLockBlack.getPlayerX(), attackLockBlack.getPlayerY());
+                attackLockBlack.setAttackLock(0);
+                this.playBoardHandle.deletePawn((this.getXIndex()+attackLockBlack.getPlayerX())/2, (this.getYIndex() +attackLockBlack.getPlayerY() )/2);
+                this.playBoardHandle.clearAllSelections();
+                if(this.checkPossibleAttacks());
+                else {
+                    this.changePlayerTurn();
+                    this.checkPossibleAttacks();
+                }
+            }else {
+                this.playBoardHandle.getBoard().get(attackLockBlack.getPlayerY()).get(attackLockBlack.getPlayerX()).
                         setBorder(BorderFactory.createLineBorder(Color.yellow, 3)); //jeśli się kliknie gdzieś indziej to żeby zostało żółte zaznaczenie
             }
 
@@ -183,8 +311,10 @@ public class Field extends JButton implements ActionListener {
             this.playBoardHandle.clearAllSelections();
             this.checkPossibleAttacks();
         }else if (this.selectedCorrectPlayer()){
+            this.playBoardHandle.clearAllSelections();
             this.choosePlayer();
         } else{
+            this.playBoardHandle.clearAllSelections();
             this.playBoardHandle.clearAllFlags();
         }
 
