@@ -101,6 +101,7 @@ public class Field extends JButton implements ActionListener {
                             attackFieldsInitializer(attackedField, currentField, currentFieldX, currentFieldY);
                             attackLockWhite.setAttackedFieldX(XToCheck - 1);
                             attackLockWhite.setAttackedFieldY(YToCheck - 1);
+                            return true;
                         }
                     }
                 }
@@ -114,6 +115,9 @@ public class Field extends JButton implements ActionListener {
                         Field attackedField = this.playBoardHandle.getBoard().get(YToCheck - 1).get(XToCheck - 1);
                         if (attackedField.getName().equals("b")){
                             attackFieldsInitializer(attackedField, currentField, currentFieldX, currentFieldY);
+                            attackLockBlack.setAttackedFieldX(XToCheck - 1);
+                            attackLockBlack.setAttackedFieldY(YToCheck - 1);
+                            return true;
                         }
                     }
                 }
@@ -164,14 +168,11 @@ public class Field extends JButton implements ActionListener {
                 this.playBoardHandle.swapFields(this.getXIndex(), this.getYIndex(), attackLockWhite.getPlayerX(), attackLockWhite.getPlayerY());
                 attackLockWhite.setAttackLock(0);
                 this.playBoardHandle.deletePawn((this.getXIndex()+attackLockWhite.getPlayerX())/2, (this.getYIndex() +attackLockWhite.getPlayerY() )/2);
-                while (this.checkPossibleAttacks()){
-                    this.playBoardHandle.swapFields(this.getXIndex(), this.getYIndex(), attackLockWhite.getPlayerX(), attackLockWhite.getPlayerY());
-                    this.playBoardHandle.deletePawn((this.getXIndex()+attackLockWhite.getPlayerX())/2, (this.getYIndex() +attackLockWhite.getPlayerY() )/2);
-                    attackLockWhite.setAttackLock(0);
-                    this.playBoardHandle.clearAllSelections();
-                }
                 this.playBoardHandle.clearAllSelections();
-                this.changePlayerTurn();
+                if(this.checkPossibleAttacks());
+                else {
+                    this.changePlayerTurn();
+                }
             }else {
                 this.playBoardHandle.getBoard().get(attackLockWhite.getPlayerY()).get(attackLockWhite.getPlayerX()).
                         setBorder(BorderFactory.createLineBorder(Color.yellow, 3)); //jeśli się kliknie gdzieś indziej to żeby zostało żółte zaznaczenie
