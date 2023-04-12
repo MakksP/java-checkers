@@ -69,7 +69,10 @@ public class PlayBoard {
     public void clearAllSelections(){
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                this.board.get(i).get(j).setDefaultBorder();
+                Field currentField = this.board.get(i).get(j);
+                if (currentField.getAttackFlag() == 0){
+                    currentField.setDefaultBorder();
+                }
             }
         }
     }
