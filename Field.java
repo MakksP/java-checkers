@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 
 public class Field extends JButton implements ActionListener {
     private String name;
-    private int attackFlag;
     private final int xIndex;
     private final int yIndex;
     private SelectedFlag selectedFlag;
@@ -16,7 +15,6 @@ public class Field extends JButton implements ActionListener {
 
     public Field(String name, int xIndex, int yIndex, String icon, PlayBoard playBoardHandle, BackgroundPanel backgroundPanelHandle){
         this.name = name;
-        this.attackFlag = 0;
         this.xIndex = xIndex;
         this.yIndex = yIndex;
         this.setIcon(new ImageIcon(icon));
@@ -52,10 +50,7 @@ public class Field extends JButton implements ActionListener {
         this.setBorder(new JButton().getBorder());
     }
 
-    public void playerMove(){
-        this.playBoardHandle.swapFields(this.selectedFlag.getIndexXSelectingButton(),
-                this.selectedFlag.getIndexYSelectingButton(), this.xIndex, this.yIndex);
-        this.selectedFlag.setSelectedFlag(false, 0, 0);
+    public void changePlayerTurn(){
         if (this.playBoardHandle.getPlayerTurn() == 1){
             this.playBoardHandle.setPlayerTurn((byte) 2);
             this.backgroundPanelHandle.setPlayerTurn("Teraz kolej gracza czarnego");
@@ -63,6 +58,13 @@ public class Field extends JButton implements ActionListener {
             this.playBoardHandle.setPlayerTurn((byte) 1);
             this.backgroundPanelHandle.setPlayerTurn("Teraz kolej gracza białego");
         }
+    }
+
+    public void playerMove(){
+        this.playBoardHandle.swapFields(this.selectedFlag.getIndexXSelectingButton(),
+                this.selectedFlag.getIndexYSelectingButton(), this.xIndex, this.yIndex);
+        this.selectedFlag.setSelectedFlag(false, 0, 0);
+        this.changePlayerTurn();
         this.playBoardHandle.clearAllFlags();
     }
 
@@ -74,8 +76,7 @@ public class Field extends JButton implements ActionListener {
     //todo 1. sprawdzic ture 2. sprawdzac czy pole to gracz w zaleznosci od tury 3. sprawdzac przekatne
 
     public static void attackFieldsInitializer(Field attackedField, Field currentField, int currentFieldX, int currentFieldY){
-        attackedField.setAttackFlag(2);
-        currentField.setAttackFlag(1);
+
         attackedField.setBorder(BorderFactory.createLineBorder(Color.red, 3));
         currentField.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 3));
         attackLockWhite.setAttackLock(1);
@@ -98,6 +99,8 @@ public class Field extends JButton implements ActionListener {
                         Field attackedField = this.playBoardHandle.getBoard().get(YToCheck - 1).get(XToCheck - 1);
                         if (attackedField.getName().equals("b")){
                             attackFieldsInitializer(attackedField, currentField, currentFieldX, currentFieldY);
+                            attackLockWhite.setAttackedFieldX(XToCheck - 1);
+                            attackLockWhite.setAttackedFieldY(YToCheck - 1);
                         }
                     }
                 }
@@ -131,34 +134,44 @@ public class Field extends JButton implements ActionListener {
         return false;
     }
 
-    public void checkPossibleAttacks(){
-        //todo rozpatrzec 4 mozliwosci bycia bitym (kazdy z naroznikow)
+    public boolean checkPossibleAttacks(){
         for (int i = 0; i < this.playBoardHandle.getHeight(); i++){
             for (int j = 0; j < this.playBoardHandle.getWidth(); j++) {
                 if(checkTopLeftAttack(j, i)){
-                    return;
+                    return true;
                 }
                 if(checkTopRightAttack(j, i)){
-                    return;
+                    return true;
                 }
                 if(checkBottomLeftAttack(j, i)){
-                    return;
+                    return true;
                 }
                 if(checkBottomRightAttack(j, i)){
-                    return;
+                    return true;
                 }
             }
         }
+        return false;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        this.playBoardHandle.clearAllSelections();
         if (attackLockWhite.getAttackLock() == 1 && this.playBoardHandle.getPlayerTurn() == 1){
             if (this.getXIndex() == attackLockWhite.getPlayerX() && this.getYIndex() == attackLockWhite.getPlayerY()){
                 this.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
             } else if (this.getXIndex() == attackLockWhite.getAttackedFieldX() && this.getYIndex() == attackLockWhite.getAttackedFieldY()){
                 //todo pole gdzie gracz sie teleportuje po biciu, obsluzyc co sie dzieje jak zbije
+                this.playBoardHandle.swapFields(this.getXIndex(), this.getYIndex(), attackLockWhite.getPlayerX(), attackLockWhite.getPlayerY());
+                attackLockWhite.setAttackLock(0);
+                this.playBoardHandle.deletePawn((this.getXIndex()+attackLockWhite.getPlayerX())/2, (this.getYIndex() +attackLockWhite.getPlayerY() )/2);
+                while (this.checkPossibleAttacks()){
+                    this.playBoardHandle.swapFields(this.getXIndex(), this.getYIndex(), attackLockWhite.getPlayerX(), attackLockWhite.getPlayerY());
+                    this.playBoardHandle.deletePawn((this.getXIndex()+attackLockWhite.getPlayerX())/2, (this.getYIndex() +attackLockWhite.getPlayerY() )/2);
+                    attackLockWhite.setAttackLock(0);
+                    this.playBoardHandle.clearAllSelections();
+                }
+                this.playBoardHandle.clearAllSelections();
+                this.changePlayerTurn();
             }else {
                 this.playBoardHandle.getBoard().get(attackLockWhite.getPlayerY()).get(attackLockWhite.getPlayerX()).
                         setBorder(BorderFactory.createLineBorder(Color.yellow, 3)); //jeśli się kliknie gdzieś indziej to żeby zostało żółte zaznaczenie
@@ -166,6 +179,7 @@ public class Field extends JButton implements ActionListener {
 
         }else if (this.selectedFlag.getLogicSelectedValue()){
             this.playerMove();
+            this.playBoardHandle.clearAllSelections();
             this.checkPossibleAttacks();
         }else if (this.selectedCorrectPlayer()){
             this.choosePlayer();
@@ -180,11 +194,5 @@ public class Field extends JButton implements ActionListener {
     }
 
 
-    public int getAttackFlag() {
-        return attackFlag;
-    }
 
-    public void setAttackFlag(int attackFlag) {
-        this.attackFlag = attackFlag;
-    }
 }

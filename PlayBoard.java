@@ -66,13 +66,13 @@ public class PlayBoard {
     }
 
 
+
     public void clearAllSelections(){
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 Field currentField = this.board.get(i).get(j);
-                if (currentField.getAttackFlag() == 0){
-                    currentField.setDefaultBorder();
-                }
+                currentField.setDefaultBorder();
+
             }
         }
     }
@@ -153,5 +153,10 @@ public class PlayBoard {
         board.get(indexYSelectingButton).get(indexXSelectingButton).setName(board.get(yIndex).get(xIndex).getName());
         board.get(yIndex).get(xIndex).setName(tmpName);
         changeIconsOfTwoFields(board.get(indexYSelectingButton).get(indexXSelectingButton), board.get(yIndex).get(xIndex));
+    }
+
+    public void deletePawn(int x, int y){
+        this.board.get(y).get(x).setName("b");
+        this.board.get(y).get(x).setIcon(new ImageIcon("b.png"));
     }
 }
