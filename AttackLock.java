@@ -1,7 +1,9 @@
 public class AttackLock {
     private int attackLock;
-    private int x;
-    private int y;
+    private int playerX;
+    private int playerY;
+    private int attackedFieldX;
+    private int attackedFieldY;
 
     public AttackLock(){
         attackLock = 0;
@@ -15,19 +17,36 @@ public class AttackLock {
         this.attackLock = attackLock;
     }
 
-    public int getX() {
-        return x;
+
+    public int getPlayerX() {
+        return playerX;
     }
 
-    public void setX(int x) {
-        this.x = x;
+    public void setPlayerX(int playerX) {
+        this.playerX = playerX;
     }
 
-    public int getY() {
-        return y;
+    public int getPlayerY() {
+        return playerY;
     }
 
-    public void setY(int y) {
-        this.y = y;
+    public void setPlayerY(int playerY) {
+        this.playerY = playerY;
+    }
+
+    public int getAttackedFieldX() {
+        return attackedFieldX;
+    }
+
+    public void setAttackedFieldX(int attackedFieldX) {
+        this.attackedFieldX = attackedFieldX;
+    }
+
+    public int getAttackedFieldY() {
+        return attackedFieldY;
+    }
+
+    public void setAttackedFieldY(int attackedFieldY) {
+        this.attackedFieldY = attackedFieldY;
     }
 }
