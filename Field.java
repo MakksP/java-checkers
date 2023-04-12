@@ -92,42 +92,114 @@ public class Field extends JButton implements ActionListener {
         currentField.repaint();
     }
 
+    public boolean checkTopLeftAttackSpecificPlayer(String attacker, String attacked,
+                                                    int currentFieldX, int currentFieldY, Field currentField){
+        if (currentField.name.equals(attacker)){
+            int XToCheck = currentField.getXIndex() - 1;
+            int YToCheck = currentField.getYIndex() - 1;
+            if (XToCheck > 0 && YToCheck > 0){
+                if (this.playBoardHandle.getBoard().get(YToCheck).get(XToCheck).getName().equals(attacked)){
+                    Field attackedField = this.playBoardHandle.getBoard().get(YToCheck - 1).get(XToCheck - 1);
+                    if (attackedField.getName().equals("b")){
+                        attackFieldsInitializer(attackedField, currentField, currentFieldX, currentFieldY);
+                        if (attacker.equals("bw")){
+                            attackLockWhite.setAttackedFieldX(XToCheck - 1);
+                            attackLockWhite.setAttackedFieldY(YToCheck - 1);
+                        } else {
+                            attackLockBlack.setAttackedFieldX(XToCheck - 1);
+                            attackLockBlack.setAttackedFieldY(YToCheck - 1);
+                        }
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean checkTopRightAttackSpecificPlayer(String attacker, String attacked,
+                                                    int currentFieldX, int currentFieldY, Field currentField){
+        if (currentField.name.equals(attacker)){
+            int XToCheck = currentField.getXIndex() + 1;
+            int YToCheck = currentField.getYIndex() - 1;
+            if (XToCheck + 1 < this.playBoardHandle.getWidth() && YToCheck > 0){
+                if (this.playBoardHandle.getBoard().get(YToCheck).get(XToCheck).getName().equals(attacked)){
+                    Field attackedField = this.playBoardHandle.getBoard().get(YToCheck - 1).get(XToCheck + 1);
+                    if (attackedField.getName().equals("b")){
+                        attackFieldsInitializer(attackedField, currentField, currentFieldX, currentFieldY);
+                        if (attacker.equals("bw")){
+                            attackLockWhite.setAttackedFieldX(XToCheck + 1);
+                            attackLockWhite.setAttackedFieldY(YToCheck - 1);
+                        } else {
+                            attackLockBlack.setAttackedFieldX(XToCheck + 1);
+                            attackLockBlack.setAttackedFieldY(YToCheck - 1);
+                        }
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean checkBottomLeftAttackSpecificPlayer(String attacker, String attacked,
+                                                     int currentFieldX, int currentFieldY, Field currentField){
+        if (currentField.name.equals(attacker)){
+            int XToCheck = currentField.getXIndex() - 1;
+            int YToCheck = currentField.getYIndex() + 1;
+            if (XToCheck > 0 && YToCheck + 1 < this.playBoardHandle.getHeight()){
+                if (this.playBoardHandle.getBoard().get(YToCheck).get(XToCheck).getName().equals(attacked)){ //jesli w lewym gornym narozniku jest czarny przeciwnik
+                    Field attackedField = this.playBoardHandle.getBoard().get(YToCheck + 1).get(XToCheck - 1);
+                    if (attackedField.getName().equals("b")){
+                        attackFieldsInitializer(attackedField, currentField, currentFieldX, currentFieldY);
+                        if (attacker.equals("bw")){
+                            attackLockWhite.setAttackedFieldX(XToCheck - 1);
+                            attackLockWhite.setAttackedFieldY(YToCheck + 1);
+                        } else {
+                            attackLockBlack.setAttackedFieldX(XToCheck - 1);
+                            attackLockBlack.setAttackedFieldY(YToCheck + 1);
+                        }
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean checkBottomRightAttackSpecificPlayer(String attacker, String attacked,
+                                                       int currentFieldX, int currentFieldY, Field currentField){
+        if (currentField.name.equals(attacker)){
+            int XToCheck = currentField.getXIndex() + 1;
+            int YToCheck = currentField.getYIndex() + 1;
+            if (XToCheck + 1 < this.playBoardHandle.getWidth() && YToCheck + 1 < this.playBoardHandle.getHeight()){
+                if (this.playBoardHandle.getBoard().get(YToCheck).get(XToCheck).getName().equals(attacked)){ //jesli w lewym gornym narozniku jest czarny przeciwnik
+                    Field attackedField = this.playBoardHandle.getBoard().get(YToCheck + 1).get(XToCheck + 1);
+                    if (attackedField.getName().equals("b")){
+                        attackFieldsInitializer(attackedField, currentField, currentFieldX, currentFieldY);
+                        if (attacker.equals("bw")){
+                            attackLockWhite.setAttackedFieldX(XToCheck + 1);
+                            attackLockWhite.setAttackedFieldY(YToCheck + 1);
+                        } else {
+                            attackLockBlack.setAttackedFieldX(XToCheck + 1);
+                            attackLockBlack.setAttackedFieldY(YToCheck + 1);
+                        }
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     //attackFlag = 1, oznacza ze z tego pola wyprowadzany jest atak
     //attackFlag = 2, oznacza ze na to pole skacze sie po ataku
     public boolean checkTopLeftAttack(int currentFieldX, int currentFieldY){
         Field currentField = this.playBoardHandle.getBoard().get(currentFieldY).get(currentFieldX);
         if (this.playBoardHandle.getPlayerTurn() == 1){ //biały
-            if (currentField.name.equals("bw")){
-                int XToCheck = currentField.getXIndex() - 1;
-                int YToCheck = currentField.getYIndex() - 1;
-                if (XToCheck > 0 && YToCheck > 0){
-                    if (this.playBoardHandle.getBoard().get(YToCheck).get(XToCheck).getName().equals("bb")){ //jesli w lewym gornym narozniku jest czarny przeciwnik
-                        Field attackedField = this.playBoardHandle.getBoard().get(YToCheck - 1).get(XToCheck - 1);
-                        if (attackedField.getName().equals("b")){
-                            attackFieldsInitializer(attackedField, currentField, currentFieldX, currentFieldY);
-                            attackLockWhite.setAttackedFieldX(XToCheck - 1);
-                            attackLockWhite.setAttackedFieldY(YToCheck - 1);
-                            return true;
-                        }
-                    }
-                }
-            }
+            return checkTopLeftAttackSpecificPlayer("bw", "bb", currentFieldX, currentFieldY, currentField);
         } else if (this.playBoardHandle.getPlayerTurn() == 2){
-            if (currentField.name.equals("bb")){
-                int XToCheck = currentField.getXIndex() - 1;
-                int YToCheck = currentField.getYIndex() - 1;
-                if (XToCheck > 0 && YToCheck > 0){
-                    if (this.playBoardHandle.getBoard().get(YToCheck).get(XToCheck).getName().equals("bw")){ //jesli w lewym gornym narozniku jest biały przeciwnik
-                        Field attackedField = this.playBoardHandle.getBoard().get(YToCheck - 1).get(XToCheck - 1);
-                        if (attackedField.getName().equals("b")){
-                            attackFieldsInitializer(attackedField, currentField, currentFieldX, currentFieldY);
-                            attackLockBlack.setAttackedFieldX(XToCheck - 1);
-                            attackLockBlack.setAttackedFieldY(YToCheck - 1);
-                            return true;
-                        }
-                    }
-                }
-            }
+            return checkTopLeftAttackSpecificPlayer("bb", "bw", currentFieldX, currentFieldY, currentField);
         }
         return false;
     }
@@ -135,37 +207,9 @@ public class Field extends JButton implements ActionListener {
     public boolean checkTopRightAttack(int currentFieldX, int currentFieldY){
         Field currentField = this.playBoardHandle.getBoard().get(currentFieldY).get(currentFieldX);
         if (this.playBoardHandle.getPlayerTurn() == 1){ //biały
-            if (currentField.name.equals("bw")){
-                int XToCheck = currentField.getXIndex() + 1;
-                int YToCheck = currentField.getYIndex() - 1;
-                if (XToCheck + 1 < this.playBoardHandle.getWidth() && YToCheck > 0){
-                    if (this.playBoardHandle.getBoard().get(YToCheck).get(XToCheck).getName().equals("bb")){ //jesli w lewym gornym narozniku jest czarny przeciwnik
-                        Field attackedField = this.playBoardHandle.getBoard().get(YToCheck - 1).get(XToCheck + 1);
-                        if (attackedField.getName().equals("b")){
-                            attackFieldsInitializer(attackedField, currentField, currentFieldX, currentFieldY);
-                            attackLockWhite.setAttackedFieldX(XToCheck + 1);
-                            attackLockWhite.setAttackedFieldY(YToCheck - 1);
-                            return true;
-                        }
-                    }
-                }
-            }
+            return checkTopRightAttackSpecificPlayer("bw", "bb", currentFieldX, currentFieldY, currentField);
         } else if (this.playBoardHandle.getPlayerTurn() == 2){
-            if (currentField.name.equals("bb")){
-                int XToCheck = currentField.getXIndex() + 1;
-                int YToCheck = currentField.getYIndex() - 1;
-                if (XToCheck + 1 < this.playBoardHandle.getWidth() && YToCheck > 0){
-                    if (this.playBoardHandle.getBoard().get(YToCheck).get(XToCheck).getName().equals("bw")){ //jesli w lewym gornym narozniku jest biały przeciwnik
-                        Field attackedField = this.playBoardHandle.getBoard().get(YToCheck - 1).get(XToCheck + 1);
-                        if (attackedField.getName().equals("b")){
-                            attackFieldsInitializer(attackedField, currentField, currentFieldX, currentFieldY);
-                            attackLockBlack.setAttackedFieldX(XToCheck + 1);
-                            attackLockBlack.setAttackedFieldY(YToCheck - 1);
-                            return true;
-                        }
-                    }
-                }
-            }
+            return checkTopRightAttackSpecificPlayer("bb", "bw", currentFieldX, currentFieldY, currentField);
         }
         return false;
     }
@@ -173,37 +217,9 @@ public class Field extends JButton implements ActionListener {
     public boolean checkBottomLeftAttack(int currentFieldX, int currentFieldY){
         Field currentField = this.playBoardHandle.getBoard().get(currentFieldY).get(currentFieldX);
         if (this.playBoardHandle.getPlayerTurn() == 1){ //biały
-            if (currentField.name.equals("bw")){
-                int XToCheck = currentField.getXIndex() - 1;
-                int YToCheck = currentField.getYIndex() + 1;
-                if (XToCheck > 0 && YToCheck + 1 < this.playBoardHandle.getHeight()){
-                    if (this.playBoardHandle.getBoard().get(YToCheck).get(XToCheck).getName().equals("bb")){ //jesli w lewym gornym narozniku jest czarny przeciwnik
-                        Field attackedField = this.playBoardHandle.getBoard().get(YToCheck + 1).get(XToCheck - 1);
-                        if (attackedField.getName().equals("b")){
-                            attackFieldsInitializer(attackedField, currentField, currentFieldX, currentFieldY);
-                            attackLockWhite.setAttackedFieldX(XToCheck - 1);
-                            attackLockWhite.setAttackedFieldY(YToCheck + 1);
-                            return true;
-                        }
-                    }
-                }
-            }
+            return checkBottomLeftAttackSpecificPlayer("bw", "bb", currentFieldX, currentFieldY, currentField);
         } else if (this.playBoardHandle.getPlayerTurn() == 2){
-            if (currentField.name.equals("bb")){
-                int XToCheck = currentField.getXIndex() - 1;
-                int YToCheck = currentField.getYIndex() + 1;
-                if (XToCheck > 0 && YToCheck < this.playBoardHandle.getHeight()){
-                    if (this.playBoardHandle.getBoard().get(YToCheck).get(XToCheck).getName().equals("bw")){ //jesli w lewym gornym narozniku jest biały przeciwnik
-                        Field attackedField = this.playBoardHandle.getBoard().get(YToCheck + 1).get(XToCheck - 1);
-                        if (attackedField.getName().equals("b")){
-                            attackFieldsInitializer(attackedField, currentField, currentFieldX, currentFieldY);
-                            attackLockBlack.setAttackedFieldX(XToCheck - 1);
-                            attackLockBlack.setAttackedFieldY(YToCheck + 1);
-                            return true;
-                        }
-                    }
-                }
-            }
+            return checkBottomLeftAttackSpecificPlayer("bb", "bw", currentFieldX, currentFieldY, currentField);
         }
         return false;
     }
@@ -211,37 +227,9 @@ public class Field extends JButton implements ActionListener {
     public boolean checkBottomRightAttack(int currentFieldX, int currentFieldY){
         Field currentField = this.playBoardHandle.getBoard().get(currentFieldY).get(currentFieldX);
         if (this.playBoardHandle.getPlayerTurn() == 1){ //biały
-            if (currentField.name.equals("bw")){
-                int XToCheck = currentField.getXIndex() + 1;
-                int YToCheck = currentField.getYIndex() + 1;
-                if (XToCheck + 1 < this.playBoardHandle.getWidth() && YToCheck + 1 < this.playBoardHandle.getHeight()){
-                    if (this.playBoardHandle.getBoard().get(YToCheck).get(XToCheck).getName().equals("bb")){ //jesli w lewym gornym narozniku jest czarny przeciwnik
-                        Field attackedField = this.playBoardHandle.getBoard().get(YToCheck + 1).get(XToCheck + 1);
-                        if (attackedField.getName().equals("b")){
-                            attackFieldsInitializer(attackedField, currentField, currentFieldX, currentFieldY);
-                            attackLockWhite.setAttackedFieldX(XToCheck + 1);
-                            attackLockWhite.setAttackedFieldY(YToCheck + 1);
-                            return true;
-                        }
-                    }
-                }
-            }
+            return checkBottomRightAttackSpecificPlayer("bw", "bb", currentFieldX, currentFieldY, currentField);
         } else if (this.playBoardHandle.getPlayerTurn() == 2){
-            if (currentField.name.equals("bb")){
-                int XToCheck = currentField.getXIndex() + 1;
-                int YToCheck = currentField.getYIndex() + 1;
-                if (XToCheck + 1 < this.playBoardHandle.getWidth() && YToCheck + 1 < this.playBoardHandle.getHeight()){
-                    if (this.playBoardHandle.getBoard().get(YToCheck).get(XToCheck).getName().equals("bw")){ //jesli w lewym gornym narozniku jest biały przeciwnik
-                        Field attackedField = this.playBoardHandle.getBoard().get(YToCheck + 1).get(XToCheck + 1);
-                        if (attackedField.getName().equals("b")){
-                            attackFieldsInitializer(attackedField, currentField, currentFieldX, currentFieldY);
-                            attackLockBlack.setAttackedFieldX(XToCheck + 1);
-                            attackLockBlack.setAttackedFieldY(YToCheck + 1);
-                            return true;
-                        }
-                    }
-                }
-            }
+            return checkBottomRightAttackSpecificPlayer("bb", "bw", currentFieldX, currentFieldY, currentField);
         }
         return false;
     }
@@ -339,7 +327,4 @@ public class Field extends JButton implements ActionListener {
     public SelectedFlag getSelectedFlag() {
         return selectedFlag;
     }
-
-
-
 }
