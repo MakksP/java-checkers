@@ -15,10 +15,8 @@ public class PlayerTime extends JLabel{
         this.setLayout(null);
         this.setBounds(x, y, width, height);
         this.setText(this.playerTag + getTime());
-        this.setForeground(Color.white);
-        this.setBackground(Color.black);
-        this.setOpaque(true);
-        this.setFont(new Font("Arial", Font.BOLD, 15));
+        this.setForeground(Color.GREEN);
+        this.setFont(new Font("Monospaced", Font.BOLD, 20));
         this.repaint();
     }
 

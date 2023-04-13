@@ -34,9 +34,9 @@ public class BackgroundPanel extends JPanel {
     }
 
     public void playerTimeInitializer(){
-        this.whitePlayer = new PlayerTime(300, 210, 200, 20, "Czas gracza białego: ");
+        this.whitePlayer = new PlayerTime(170, 210, 320, 25, "Czas gracza białego: ");
         this.whitePlayer.setActiveFlag(1);
-        this.blackPlayer = new PlayerTime(800, 210, 200, 20, "Czas gracza czarnego: ");
+        this.blackPlayer = new PlayerTime(800, 210, 340, 25, "Czas gracza czarnego: ");
         this.add(whitePlayer);
         this.add(blackPlayer);
     }
