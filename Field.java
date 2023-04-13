@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Field extends JButton implements ActionListener {
+public class Field extends JButton implements ActionListener, Runnable {
     private String name;
     private final int xIndex;
     private final int yIndex;
@@ -64,6 +64,13 @@ public class Field extends JButton implements ActionListener {
         this.playBoardHandle.swapFields(this.selectedFlag.getIndexXSelectingButton(),
                 this.selectedFlag.getIndexYSelectingButton(), this.xIndex, this.yIndex);
         this.selectedFlag.setSelectedFlag(false, 0, 0);
+        if (this.playBoardHandle.getPlayerTurn() == 1){
+            this.backgroundPanelHandle.getWhitePlayer().setActiveFlag(0);
+            this.backgroundPanelHandle.getBlackPlayer().setActiveFlag(1);
+        } else {
+            this.backgroundPanelHandle.getBlackPlayer().setActiveFlag(0);
+            this.backgroundPanelHandle.getWhitePlayer().setActiveFlag(1);
+        }
         this.changePlayerTurn();
         this.playBoardHandle.clearAllFlags();
     }
@@ -285,6 +292,10 @@ public class Field extends JButton implements ActionListener {
                 if(this.checkContinuingAttack(this.getXIndex(), this.getYIndex()));
                 else {
                     this.changePlayerTurn();
+                    this.backgroundPanelHandle.getWhitePlayer().setActiveFlag(0);
+                    this.backgroundPanelHandle.getBlackPlayer().setActiveFlag(1);
+                    Thread timeCounter = new Thread(this);
+                    timeCounter.start();
                     this.checkPossibleAttacks();
                 }
             }else {
@@ -303,6 +314,10 @@ public class Field extends JButton implements ActionListener {
                 if(this.checkContinuingAttack(this.getXIndex(), this.getYIndex()));
                 else {
                     this.changePlayerTurn();
+                    this.backgroundPanelHandle.getBlackPlayer().setActiveFlag(0);
+                    this.backgroundPanelHandle.getWhitePlayer().setActiveFlag(1);
+                    Thread timeCounter = new Thread(this);
+                    timeCounter.start();
                     this.checkPossibleAttacks();
                 }
             }else {
@@ -312,6 +327,8 @@ public class Field extends JButton implements ActionListener {
 
         }else if (this.selectedFlag.getLogicSelectedValue()){
             this.playerMove();
+            Thread timeCounter = new Thread(this);
+            timeCounter.start();
             this.playBoardHandle.clearAllSelections();
             this.checkPossibleAttacks();
         }else if (this.selectedCorrectPlayer()){
@@ -321,10 +338,51 @@ public class Field extends JButton implements ActionListener {
             this.playBoardHandle.clearAllSelections();
             this.playBoardHandle.clearAllFlags();
         }
-
     }
 
     public SelectedFlag getSelectedFlag() {
         return selectedFlag;
+    }
+
+    @Override
+    public void run() {
+        if (this.playBoardHandle.getPlayerTurn() == 1){
+
+            while (true){
+                if (this.backgroundPanelHandle.getWhitePlayer().getActiveFlag() == 0){
+                    return;
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                if (this.backgroundPanelHandle.getWhitePlayer().getActiveFlag() == 0){
+                    return;
+                }
+                this.backgroundPanelHandle.getWhitePlayer().increaseTime();
+                this.backgroundPanelHandle.getWhitePlayer().setText(this.backgroundPanelHandle.getWhitePlayer().returnFullLabel());
+                this.backgroundPanelHandle.getWhitePlayer().repaint();
+                this.backgroundPanelHandle.repaint();
+            }
+        } else {
+            while (true){
+                if (this.backgroundPanelHandle.getBlackPlayer().getActiveFlag() == 0){
+                    return;
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                if (this.backgroundPanelHandle.getBlackPlayer().getActiveFlag() == 0){
+                    return;
+                }
+                this.backgroundPanelHandle.getBlackPlayer().increaseTime();
+                this.backgroundPanelHandle.getBlackPlayer().setText(this.backgroundPanelHandle.getBlackPlayer().returnFullLabel());
+                this.backgroundPanelHandle.getBlackPlayer().repaint();
+                this.backgroundPanelHandle.repaint();
+            }
+        }
     }
 }

@@ -3,9 +3,10 @@ import java.awt.*;
 
 public class BackgroundPanel extends JPanel {
     private Image backgroundImage;
-    private JLabel playerWhiteTime;
-    private JLabel playerBlackTime;
+
     private JLabel playerTurn;
+    private PlayerTime whitePlayer;
+    private PlayerTime blackPlayer;
 
     public BackgroundPanel(String image){
         this.backgroundImage = new ImageIcon(image).getImage();
@@ -15,22 +16,6 @@ public class BackgroundPanel extends JPanel {
         graphics.drawImage(backgroundImage, 0, 0, null);
     }
 
-
-    public JLabel getPlayerWhiteTime() {
-        return playerWhiteTime;
-    }
-
-    public void setPlayerWhiteTime(JLabel playerWhiteTime) {
-        this.playerWhiteTime = playerWhiteTime;
-    }
-
-    public JLabel getPlayerBlackTime() {
-        return playerBlackTime;
-    }
-
-    public void setPlayerBlackTime(JLabel playerBlackTime) {
-        this.playerBlackTime = playerBlackTime;
-    }
 
     public JLabel getPlayerTurn() {
         return playerTurn;
@@ -48,6 +33,14 @@ public class BackgroundPanel extends JPanel {
 
     }
 
+    public void playerTimeInitializer(){
+        this.whitePlayer = new PlayerTime(300, 210, 200, 20, "Czas gracza białego: ");
+        this.whitePlayer.setActiveFlag(1);
+        this.blackPlayer = new PlayerTime(800, 210, 200, 20, "Czas gracza czarnego: ");
+        this.add(whitePlayer);
+        this.add(blackPlayer);
+    }
+
     public void playerTurnInitializer(){
         this.playerTurn = new JLabel();
         this.playerTurn.setLayout(null);
@@ -59,5 +52,13 @@ public class BackgroundPanel extends JPanel {
         this.playerTurn.setOpaque(true);
         this.add(this.playerTurn);
         this.repaint();
+    }
+
+    public PlayerTime getWhitePlayer(){
+        return this.whitePlayer;
+    }
+
+    public PlayerTime getBlackPlayer(){
+        return this.blackPlayer;
     }
 }

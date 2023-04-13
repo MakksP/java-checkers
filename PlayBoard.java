@@ -3,7 +3,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PlayBoard {
+public class PlayBoard implements Runnable {
     private final int width = 8;
     private final int height = 8;
     private ArrayList<ArrayList<Field>> board;
@@ -130,6 +130,9 @@ public class PlayBoard {
         }
         this.playerTurn = 1;
         this.backgroundPanelHandle = backgroundPanelHandle;
+        this.backgroundPanelHandle.playerTimeInitializer();
+        Thread timeCounter = new Thread(this);
+        timeCounter.start();
         boardInitializer(namesOfFields);
     }
 
@@ -158,5 +161,26 @@ public class PlayBoard {
     public void deletePawn(int x, int y){
         this.board.get(y).get(x).setName("b");
         this.board.get(y).get(x).setIcon(new ImageIcon("b.png"));
+    }
+
+    @Override
+    public void run() {
+        while (true){
+            if (this.backgroundPanelHandle.getWhitePlayer().getActiveFlag() == 0){
+                return;
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            if (this.backgroundPanelHandle.getWhitePlayer().getActiveFlag() == 0){
+                return;
+            }
+            this.backgroundPanelHandle.getWhitePlayer().increaseTime();
+            this.backgroundPanelHandle.getWhitePlayer().setText(this.backgroundPanelHandle.getWhitePlayer().returnFullLabel());
+            this.backgroundPanelHandle.getWhitePlayer().repaint();
+            this.backgroundPanelHandle.repaint();
+        }
     }
 }
